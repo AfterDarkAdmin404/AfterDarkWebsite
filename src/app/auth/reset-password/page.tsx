@@ -5,36 +5,45 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 
-export default function LoginPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { updatePassword } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
     password: '',
-    rememberMe: false
+    confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
 
     try {
-      const { error } = await signIn(formData.email, formData.password);
+      const { error } = await updatePassword(formData.password);
 
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password. Please try again.');
-        } else if (error.message.includes('Email not confirmed')) {
-          setError('Please check your email and confirm your account before signing in.');
-        } else {
-          setError(error.message || 'Login failed. Please try again.');
-        }
+        setError(error.message || 'Failed to update password. Please try again.');
       } else {
-        // Successful login - redirect to home page
-        router.push('/');
+        setSuccess('Password updated successfully! Redirecting to login...');
+        setTimeout(() => {
+          router.push('/login');
+        }, 2000);
       }
     } catch (err) {
       setError('Network error. Please try again.');
@@ -44,10 +53,10 @@ export default function LoginPage() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     }));
   };
 
@@ -56,35 +65,30 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="text-4xl font-bold text-foreground font-serif mb-2">
-            Welcome Back
+            Reset Password
           </h2>
           <p className="text-gray-300">
-            Sign in to continue your journey
+            Enter your new password
           </p>
         </div>
         
         <div className="bg-black/40 backdrop-blur-md p-8 rounded-2xl border border-accent/20">
+          {error && (
+            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+              {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="mb-4 p-3 bg-green-500/20 border border-green-500/50 rounded-lg text-green-300 text-sm">
+              {success}
+            </div>
+          )}
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                Email Address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                disabled={loading}
-                className="w-full px-4 py-3 bg-black/60 border border-gray-600 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 disabled:opacity-50"
-                placeholder="Enter your email"
-              />
-            </div>
-            
-            <div>
               <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
-                Password
+                New Password
               </label>
               <input
                 id="password"
@@ -95,57 +99,44 @@ export default function LoginPage() {
                 onChange={handleChange}
                 disabled={loading}
                 className="w-full px-4 py-3 bg-black/60 border border-gray-600 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 disabled:opacity-50"
-                placeholder="Enter your password"
+                placeholder="Enter your new password (min 6 characters)"
               />
             </div>
             
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="rememberMe"
-                  name="rememberMe"
-                  type="checkbox"
-                  checked={formData.rememberMe}
-                  onChange={handleChange}
-                  disabled={loading}
-                  className="h-4 w-4 text-accent focus:ring-accent border-gray-600 rounded bg-black/60 disabled:opacity-50"
-                />
-                <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-300">
-                  Remember me
-                </label>
-              </div>
-              
-              <Link
-                href="/forgot-password"
-                className="text-sm text-accent hover:text-accent-dark transition-colors duration-300"
-              >
-                Forgot password?
-              </Link>
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-2">
+                Confirm New Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                disabled={loading}
+                className="w-full px-4 py-3 bg-black/60 border border-gray-600 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 disabled:opacity-50"
+                placeholder="Confirm your new password"
+              />
             </div>
-            
-            {error && (
-              <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
             
             <button
               type="submit"
               disabled={loading}
               className="w-full bg-gradient-to-r from-accent to-accent-dark text-foreground py-3 px-4 rounded-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/30 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing In...' : 'Sign In'}
+              {loading ? 'Updating...' : 'Update Password'}
             </button>
           </form>
           
           <div className="mt-6 text-center">
             <p className="text-gray-300">
-              Don't have an account?{' '}
+              Remember your password?{' '}
               <Link
-                href="/register"
+                href="/login"
                 className="text-accent hover:text-accent-dark transition-colors duration-300 font-medium"
               >
-                Sign up here
+                Sign in here
               </Link>
             </p>
           </div>

@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if reaction already exists
-    const { data: existingReaction } = await supabase
+    const { data: existingReaction } = await supabaseAdmin
       .from('reactions')
       .select('id')
       .eq('user_id', user_id)
@@ -43,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Add reaction
-    const { data: reaction, error } = await supabase
+    const { data: reaction, error } = await supabaseAdmin
       .from('reactions')
       .insert({
         user_id,
@@ -84,7 +79,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Remove reaction
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('reactions')
       .delete()
       .eq('user_id', user_id)
@@ -124,7 +119,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    let query = supabase
+    let query = supabaseAdmin
       .from('reactions')
       .select(`
         *,

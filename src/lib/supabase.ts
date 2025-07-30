@@ -1,15 +1,49 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Client-side Supabase client
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Comprehensive debugging
+console.log('=== SUPABASE ENVIRONMENT DEBUG ===');
+console.log('process.env.NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log('process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'EXISTS' : 'MISSING');
+console.log('process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY length:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.length);
+console.log('typeof process.env.NEXT_PUBLIC_SUPABASE_URL:', typeof process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log('typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY:', typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+console.log('=== END DEBUG ===');
 
-// Server-side Supabase client with service role key
+// Use environment variables with fallback to hardcoded values
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dciipajoatfzclkeiamp.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaWlwYWpvYXRmemNsa2VpYW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTgzNjksImV4cCI6MjA2ODg5NDM2OX0.zIl9SSZiw3SD1flb5tzFqu7GxIpVIL3DhZm2QCENmDk';
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaWlwYWpvYXRmemNsa2VpYW1wIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzMxODM2OSwiZXhwIjoyMDY4ODk0MzY5fQ.6TKhjgTRzm8sPvkwr7lanvXqC7bVUDHfAYTwMhgDm08';
+
+// Debug the actual values being passed to createClient
+console.log('=== CREATE CLIENT DEBUG ===');
+console.log('supabaseUrl:', supabaseUrl);
+console.log('supabaseAnonKey:', supabaseAnonKey);
+console.log('supabaseServiceRoleKey:', supabaseServiceRoleKey);
+console.log('supabaseUrl type:', typeof supabaseUrl);
+console.log('supabaseAnonKey type:', typeof supabaseAnonKey);
+console.log('supabaseServiceRoleKey type:', typeof supabaseServiceRoleKey);
+console.log('supabaseUrl truthy:', !!supabaseUrl);
+console.log('supabaseAnonKey truthy:', !!supabaseAnonKey);
+console.log('supabaseServiceRoleKey truthy:', !!supabaseServiceRoleKey);
+console.log('=== END CREATE CLIENT DEBUG ===');
+
+if (!supabaseUrl) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable');
+}
+
+if (!supabaseAnonKey) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable');
+}
+
+console.log('=== CREATING SUPABASE CLIENT ===');
+// Client-side Supabase client (only needs anon key)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+console.log('=== SUPABASE CLIENT CREATED SUCCESSFULLY ===');
+
+// Server-side Supabase client with service role key (only used in API routes)
 export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  supabaseUrl,
+  supabaseServiceRoleKey,
   {
     auth: {
       autoRefreshToken: false,
@@ -214,14 +248,11 @@ export interface Database {
 }
 
 // Typed Supabase client
-export const typedSupabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+export const typedSupabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 export const typedSupabaseAdmin = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  supabaseUrl,
+  supabaseServiceRoleKey,
   {
     auth: {
       autoRefreshToken: false,

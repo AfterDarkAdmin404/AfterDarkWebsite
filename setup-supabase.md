@@ -14,7 +14,7 @@ Edit `.env.local` with your Supabase credentials:
 
 ```env
 # Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://dciipajoatfzclkeiamp.supabase.co
+NEXT_PUBLIC_SUPABASE_URL= https://dciipajoatfzclkeiamp.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaWlwYWpvYXRmemNsa2VpYW1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMTgzNjksImV4cCI6MjA2ODg5NDM2OX0.zIl9SSZiw3SD1flb5tzFqu7GxIpVIL3DhZm2QCENmDk
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
 

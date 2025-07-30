@@ -1,4 +1,4 @@
-import { FloatingParticles, Header, Hero, Features, Footer } from "./components";
+import { FloatingParticles, Header, Hero, Features, About, Contact, Footer } from "./components";
 
 export default function Home() {
   return (
@@ -8,6 +8,8 @@ export default function Home() {
       <main>
         <Hero />
         <Features />
+        <About />
+        <Contact />
       </main>
       <Footer />
     </div>
