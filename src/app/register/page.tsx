@@ -9,7 +9,6 @@ export default function RegisterPage() {
   const router = useRouter();
   const { signUp } = useAuth();
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -50,14 +49,10 @@ export default function RegisterPage() {
       return;
     }
 
-    if (formData.username.length < 3) {
-      setError('Username must be at least 3 characters long.');
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const { error } = await signUp(formData.email, formData.password, formData.username);
+      // Generate username from email (everything before @)
+      const username = formData.email.split('@')[0];
+      const { error } = await signUp(formData.email, formData.password, username);
 
       if (error) {
         if (error.message.includes('already registered')) {
@@ -94,7 +89,7 @@ export default function RegisterPage() {
             Join AfterDark
           </h2>
           <p className="text-gray-300">
-            Create your account and start exploring
+            Create your account and start exploring. Your username will be automatically generated from your email.
           </p>
         </div>
         
@@ -116,22 +111,7 @@ export default function RegisterPage() {
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-foreground mb-2">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                value={formData.username}
-                onChange={handleChange}
-                disabled={isLoading}
-                className="w-full px-4 py-3 bg-black/60 border border-gray-600 rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all duration-300 disabled:opacity-50"
-                placeholder="Choose a username (min 3 characters)"
-              />
-            </div>
+
             
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">

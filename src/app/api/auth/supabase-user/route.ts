@@ -3,7 +3,9 @@ import { db } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, username } = await request.json();
+    const { email } = await request.json();
+
+    console.log('Supabase user API called with:', { email });
 
     if (!email) {
       return NextResponse.json(
@@ -17,12 +19,14 @@ export async function POST(request: NextRequest) {
     
     // If user doesn't exist, create one
     if (!user) {
-      // Generate a username if not provided
-      const generatedUsername = username || email.split('@')[0];
+      // Always use email's local part as username
+      const finalUsername = email.split('@')[0];
+      
+      console.log('Creating new user with username:', finalUsername);
       
       // Create user in custom table
       user = await db.createUser({
-        username: generatedUsername.toLowerCase(),
+        username: finalUsername.toLowerCase(),
         email: email.toLowerCase(),
         password_hash: '', // Empty since we're using Supabase Auth
         user_role: 2, // Default role (2 = user)
@@ -34,6 +38,22 @@ export async function POST(request: NextRequest) {
           { error: 'Failed to create user record' },
           { status: 500 }
         );
+      }
+    } else {
+      // User exists, but check if we need to update their username
+      // Always use email's local part as the source of truth
+      const expectedUsername = email.split('@')[0].toLowerCase();
+      if (user.username !== expectedUsername) {
+        console.log('Updating existing user username from:', user.username, 'to:', expectedUsername);
+        
+        // Update the user's username to match email's local part
+        const updatedUser = await db.updateUser(user.id, {
+          username: expectedUsername
+        });
+        
+        if (updatedUser) {
+          user = updatedUser;
+        }
       }
     }
 

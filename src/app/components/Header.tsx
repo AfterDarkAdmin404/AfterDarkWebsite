@@ -10,7 +10,8 @@ export function Header() {
   const handleLogout = async () => {
     try {
       await signOut();
-      window.location.href = process.env.NEXT_PUBLIC_SITE_URL || '/';
+      // Force a page reload to clear all state
+      window.location.reload();
     } catch (err) {
       console.error('Logout failed:', err);
     }
