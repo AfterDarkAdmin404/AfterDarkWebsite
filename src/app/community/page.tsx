@@ -122,7 +122,7 @@ const CommunityPage: React.FC = () => {
           {/* Back Button */}
           <div className="mb-6">
             <a
-              href="http://localhost:3000/"
+              href="/"
               className="inline-flex items-center text-accent hover:text-accent-dark transition-colors duration-300 group"
             >
               <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
