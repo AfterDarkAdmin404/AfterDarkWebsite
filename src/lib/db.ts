@@ -1,4 +1,4 @@
-import { typedSupabaseAdmin } from './supabase';
+import { supabaseAdmin } from './supabase';
 import type { Database } from './supabase';
 
 type User = Database['public']['Tables']['users']['Row'];
@@ -22,7 +22,7 @@ export class SupabaseDatabase {
   // User operations
   async findUserByEmail(email: string): Promise<User | null> {
     try {
-      const { data, error } = await typedSupabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('users')
         .select('*')
         .eq('email', email)
@@ -42,7 +42,7 @@ export class SupabaseDatabase {
   
   async findUserById(id: string): Promise<User | null> {
     try {
-      const { data, error } = await typedSupabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('users')
         .select('*')
         .eq('id', id)
@@ -62,7 +62,7 @@ export class SupabaseDatabase {
   
   async createUser(userData: UserInsert): Promise<User | null> {
     try {
-      const { data, error } = await typedSupabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('users')
         .insert(userData)
         .select()
@@ -82,7 +82,7 @@ export class SupabaseDatabase {
   
   async updateUser(id: string, userData: UserUpdate): Promise<User | null> {
     try {
-      const { data, error } = await typedSupabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('users')
         .update(userData)
         .eq('id', id)
@@ -103,7 +103,7 @@ export class SupabaseDatabase {
   
   async updateLastLogin(id: string): Promise<boolean> {
     try {
-      const { error } = await typedSupabaseAdmin
+      const { error } = await supabaseAdmin
         .from('users')
         .update({ last_login: new Date().toISOString() })
         .eq('id', id);
@@ -123,8 +123,8 @@ export class SupabaseDatabase {
   async checkUserExists(email: string, username: string): Promise<{ emailExists: boolean; usernameExists: boolean }> {
     try {
       const [emailResult, usernameResult] = await Promise.all([
-        typedSupabaseAdmin.from('users').select('id').eq('email', email).single(),
-        typedSupabaseAdmin.from('users').select('id').eq('username', username).single()
+        supabaseAdmin.from('users').select('id').eq('email', email).single(),
+        supabaseAdmin.from('users').select('id').eq('username', username).single()
       ]);
       
       return {
@@ -144,7 +144,7 @@ export class SupabaseDatabase {
 
   // Get typed Supabase admin client
   get typedSupabaseAdmin() {
-    return typedSupabaseAdmin;
+    return supabaseAdmin;
   }
   
   // Post operations (for future use)
@@ -152,7 +152,7 @@ export class SupabaseDatabase {
     try {
       const offset = (page - 1) * limit;
       
-      const { data, error } = await typedSupabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('posts')
         .select('*')
         .range(offset, offset + limit - 1)
@@ -172,7 +172,7 @@ export class SupabaseDatabase {
   
   async createPost(postData: any) {
     try {
-      const { data, error } = await typedSupabaseAdmin
+      const { data, error } = await supabaseAdmin
         .from('posts')
         .insert(postData)
         .select()

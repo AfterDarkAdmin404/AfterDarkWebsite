@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     // In production, you should check: if (user.role !== 1) return 403
 
     // Build query
-    let query = db.typedSupabaseAdmin
+    let query = db.supabaseAdmin
       .from('users')
       .select('id, username, email, user_role, created_at, updated_at, last_login, is_active')
       .order('created_at', { ascending: false });
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
     let totalCount = 0;
     if (count === null) {
       // If count is not available, get it separately
-      const { count: total } = await db.typedSupabaseAdmin
+      const { count: total } = await db.supabaseAdmin
         .from('users')
         .select('*', { count: 'exact', head: true });
       totalCount = total || 0;

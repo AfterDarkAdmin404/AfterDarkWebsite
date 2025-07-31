@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { typedSupabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET /api/forum/threads - Get threads with filtering and pagination
 export async function GET(request: NextRequest) {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit;
 
     // Build the query
-    let query = typedSupabaseAdmin
+    let query = supabaseAdmin
       .from('forum_threads')
       .select(`
         *,
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get total count first
-    let countQuery = typedSupabaseAdmin
+    let countQuery = supabaseAdmin
       .from('forum_threads')
       .select('*', { count: 'exact', head: true })
       .eq('is_locked', false);
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if category exists and is active
-    const { data: category } = await typedSupabaseAdmin
+    const { data: category } = await supabaseAdmin
       .from('forum_categories')
       .select('id')
       .eq('id', category_id)
@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the thread
-    const { data: thread, error } = await typedSupabaseAdmin
+    const { data: thread, error } = await supabaseAdmin
       .from('forum_threads')
       .insert({
         title,

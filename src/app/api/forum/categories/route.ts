@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { typedSupabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET /api/forum/categories - Get all active categories
 export async function GET() {
   try {
-    const { data: categories, error } = await typedSupabaseAdmin
+    const { data: categories, error } = await supabaseAdmin
       .from('forum_categories')
       .select('*')
       .eq('is_active', true)
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if slug already exists
-    const { data: existingCategory } = await typedSupabaseAdmin
+    const { data: existingCategory } = await supabaseAdmin
       .from('forum_categories')
       .select('id')
       .eq('slug', slug)
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the category
-    const { data: category, error } = await typedSupabaseAdmin
+    const { data: category, error } = await supabaseAdmin
       .from('forum_categories')
       .insert({
         name,

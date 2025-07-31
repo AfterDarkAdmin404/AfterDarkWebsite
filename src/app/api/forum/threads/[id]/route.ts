@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { typedSupabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET /api/forum/threads/[id] - Get a single thread with comments
 export async function GET(

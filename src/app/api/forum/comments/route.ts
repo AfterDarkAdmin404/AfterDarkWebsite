@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { typedSupabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET /api/forum/comments - Get comments for a thread
 export async function GET(request: NextRequest) {
@@ -19,13 +19,13 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit;
 
     // Get total count first
-    const { count: totalCount } = await typedSupabaseAdmin
+    const { count: totalCount } = await supabaseAdmin
       .from('forum_comments')
       .select('*', { count: 'exact', head: true })
       .eq('thread_id', threadId);
 
     // Get comments for the thread
-    const { data: comments, error } = await typedSupabaseAdmin
+    const { data: comments, error } = await supabaseAdmin
       .from('forum_comments')
       .select(`
         *,
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if thread exists and is not locked
-    const { data: thread } = await typedSupabaseAdmin
+    const { data: thread } = await supabaseAdmin
       .from('forum_threads')
       .select('id, is_locked')
       .eq('id', thread_id)
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
 
     // Check if parent comment exists (if provided)
     if (parent_id) {
-      const { data: parentComment } = await typedSupabaseAdmin
+      const { data: parentComment } = await supabaseAdmin
         .from('forum_comments')
         .select('id')
         .eq('id', parent_id)
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the comment
-    const { data: comment, error } = await typedSupabaseAdmin
+    const { data: comment, error } = await supabaseAdmin
       .from('forum_comments')
       .insert({
         thread_id,

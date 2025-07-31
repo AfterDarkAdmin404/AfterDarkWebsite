@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { typedSupabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 // GET /api/forum/test-users - Get users for testing (no auth required)
 export async function GET() {
   try {
-    const { data: users, error } = await typedSupabaseAdmin
+    const { data: users, error } = await supabaseAdmin
       .from('users')
       .select('id, username, email, user_role')
       .eq('is_active', true)
