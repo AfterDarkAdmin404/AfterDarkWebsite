@@ -109,7 +109,7 @@ const CommunityPage: React.FC = () => {
           {/* Back Button */}
           <div className="mb-6">
             <a
-              href={process.env.NEXT_PUBLIC_SITE_URL || '/'}
+              href="/"
               className="inline-flex items-center text-accent hover:text-accent-dark transition-colors duration-300 group"
             >
               <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,7 +254,7 @@ const CommunityPage: React.FC = () => {
             <h3 className="text-2xl font-bold text-foreground mb-6 font-serif">Learn More About AfterDark</h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                              <a
-                 href={`${process.env.NEXT_PUBLIC_SITE_URL || '/'}#about`}
+                 href="/#about"
                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
                >
                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -263,7 +263,7 @@ const CommunityPage: React.FC = () => {
                  About Us
                </a>
                <a
-                 href={`${process.env.NEXT_PUBLIC_SITE_URL || '/'}#contact`}
+                 href="/#contact"
                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
                >
                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -144,7 +144,7 @@ const ThreadDetailPage: React.FC<ThreadDetailPageProps> = ({ params }) => {
               {error || 'Thread not found'}
             </h1>
             <Link
-              href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/community`}
+              href="/community"
               className="text-blue-600 dark:text-blue-400 hover:underline"
             >
               ← Back to Community
@@ -161,7 +161,7 @@ const ThreadDetailPage: React.FC<ThreadDetailPageProps> = ({ params }) => {
         {/* Back Button */}
         <div className="mb-6">
           <Link
-            href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/community`}
+            href="/community"
             className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
