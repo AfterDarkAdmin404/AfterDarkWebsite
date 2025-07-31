@@ -266,24 +266,24 @@ const CommunityPage: React.FC = () => {
           <div className="text-center">
             <h3 className="text-2xl font-bold text-foreground mb-6 font-serif">Learn More About AfterDark</h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a
-                href="/#about"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                About Us
-              </a>
-              <a
-                href="/#contact"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Contact Us
-              </a>
+                             <a
+                 href="https://after-dark-website.vercel.app/#about"
+                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
+               >
+                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                 </svg>
+                 About Us
+               </a>
+               <a
+                 href="https://after-dark-website.vercel.app/#contact"
+                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
+               >
+                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                 </svg>
+                 Contact Us
+               </a>
             </div>
             <p className="text-muted-foreground mt-4 text-sm">
               Discover our mission, meet our team, and get in touch with us
