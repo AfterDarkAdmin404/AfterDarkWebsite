@@ -5,11 +5,5 @@
   "installCommand": "npm install",
   "env": {
     "NEXT_PUBLIC_SITE_URL": "https://after-dark-website.vercel.app"
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
-  ]
+  }
 } 
