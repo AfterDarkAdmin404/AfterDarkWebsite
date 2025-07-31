@@ -74,7 +74,7 @@ const ThreadCard: React.FC<ThreadCardProps> = ({ thread, userId }) => {
         </div>
 
         {/* Title and Content */}
-        <Link href={`https://after-dark-website.vercel.app/community/threads/${thread.id}`} className="block group">
+        <Link href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/community/threads/${thread.id}`} className="block group">
           <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
             {thread.title}
           </h3>

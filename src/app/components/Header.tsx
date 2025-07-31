@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 
 export function Header() {
-  const { user, signOut } = useAuth();
+  const { user, customUser, signOut } = useAuth();
 
   const handleLogout = async () => {
     try {
       await signOut();
-      window.location.href = 'https://after-dark-website.vercel.app/';
+      window.location.href = process.env.NEXT_PUBLIC_SITE_URL || '/';
     } catch (err) {
       console.error('Logout failed:', err);
     }
@@ -49,7 +49,7 @@ export function Header() {
                 </Link>
               </li>
               <li>
-                <Link href="https://after-dark-website.vercel.app/community" className="text-foreground hover:text-accent transition-colors duration-300 relative group">
+                <Link href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/community`} className="text-foreground hover:text-accent transition-colors duration-300 relative group">
                   Community
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                 </Link>
@@ -74,7 +74,7 @@ export function Header() {
             {user ? (
               <div className="flex items-center gap-4">
                 <span className="text-foreground">
-                  Welcome, {user.user_metadata?.username || user.email}
+                  Welcome, {customUser?.username || user.user_metadata?.username || user.email}
                 </span>
                 <button
                   onClick={handleLogout}
@@ -86,13 +86,13 @@ export function Header() {
             ) : (
               <div className="flex items-center gap-4">
                 <Link
-                  href="https://after-dark-website.vercel.app/login"
+                  href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/login`}
                   className="text-foreground hover:text-accent transition-colors duration-300"
                 >
                   Login
                 </Link>
                 <Link
-                  href="https://after-dark-website.vercel.app/register"
+                  href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/register`}
                   className="bg-accent hover:bg-accent-dark text-foreground px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   Sign Up

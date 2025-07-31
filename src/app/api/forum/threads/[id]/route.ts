@@ -4,13 +4,13 @@ import { supabaseAdmin } from '@/lib/supabase';
 // GET /api/forum/threads/[id] - Get a single thread with comments
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const threadId = params.id;
+    const { id: threadId } = await params;
 
     // Get the thread with category and author info
-    const { data: thread, error: threadError } = await typedSupabaseAdmin
+    const { data: thread, error: threadError } = await supabaseAdmin
       .from('forum_threads')
       .select(`
         *,
@@ -30,13 +30,13 @@ export async function GET(
     }
 
     // Increment view count
-    await typedSupabaseAdmin
+    await supabaseAdmin
       .from('forum_threads')
       .update({ view_count: thread.view_count + 1 })
       .eq('id', threadId);
 
     // Get comments for this thread
-    const { data: comments, error: commentsError } = await typedSupabaseAdmin
+    const { data: comments, error: commentsError } = await supabaseAdmin
       .from('forum_comments')
       .select(`
         *,
@@ -70,10 +70,10 @@ export async function GET(
 // PUT /api/forum/threads/[id] - Update a thread
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const threadId = params.id;
+    const { id: threadId } = await params;
     const body = await request.json();
     const { title, content, category_id } = body;
 
@@ -103,7 +103,7 @@ export async function PUT(
 
     // Check if category exists (if provided)
     if (category_id) {
-      const { data: category } = await typedSupabaseAdmin
+      const { data: category } = await supabaseAdmin
         .from('forum_categories')
         .select('id')
         .eq('id', category_id)
@@ -119,7 +119,7 @@ export async function PUT(
     }
 
     // Update the thread
-    const { data: thread, error } = await typedSupabaseAdmin
+    const { data: thread, error } = await supabaseAdmin
       .from('forum_threads')
       .update({
         title,
@@ -156,13 +156,13 @@ export async function PUT(
 // DELETE /api/forum/threads/[id] - Delete a thread
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const threadId = params.id;
+    const { id: threadId } = await params;
 
     // Delete the thread (comments will be deleted automatically due to CASCADE)
-    const { error } = await typedSupabaseAdmin
+    const { error } = await supabaseAdmin
       .from('forum_threads')
       .delete()
       .eq('id', threadId);

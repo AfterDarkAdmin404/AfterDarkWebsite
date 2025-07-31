@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import ThreadCard from '../components/forum/ThreadCard';
 import CreateThreadModal from '../components/forum/CreateThreadModal';
+import { useAuth } from '@/lib/auth-context';
 
 interface Thread {
   id: string;
@@ -41,24 +42,10 @@ const CommunityPage: React.FC = () => {
   const [sortBy, setSortBy] = useState('last_reply_at');
   const [sortOrder, setSortOrder] = useState('desc');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userId, setUserId] = useState<string | undefined>();
-
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await fetch('/api/auth/me');
-      if (response.ok) {
-        const data = await response.json();
-        setUserId(data.user?.id);
-      } else {
-        console.log('User not logged in');
-      }
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
+  const { customUser } = useAuth();
+  const userId = customUser?.id;
 
   useEffect(() => {
-    fetchCurrentUser();
     fetchCategories();
     fetchThreads();
   }, []);
@@ -122,7 +109,7 @@ const CommunityPage: React.FC = () => {
           {/* Back Button */}
           <div className="mb-6">
             <a
-              href="https://after-dark-website.vercel.app/"
+              href={process.env.NEXT_PUBLIC_SITE_URL || '/'}
               className="inline-flex items-center text-accent hover:text-accent-dark transition-colors duration-300 group"
             >
               <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -267,7 +254,7 @@ const CommunityPage: React.FC = () => {
             <h3 className="text-2xl font-bold text-foreground mb-6 font-serif">Learn More About AfterDark</h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                              <a
-                 href="https://after-dark-website.vercel.app/#about"
+                 href={`${process.env.NEXT_PUBLIC_SITE_URL || '/'}#about`}
                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
                >
                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -276,7 +263,7 @@ const CommunityPage: React.FC = () => {
                  About Us
                </a>
                <a
-                 href="https://after-dark-website.vercel.app/#contact"
+                 href={`${process.env.NEXT_PUBLIC_SITE_URL || '/'}#contact`}
                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-accent-dark text-foreground rounded-lg hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 font-medium"
                >
                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

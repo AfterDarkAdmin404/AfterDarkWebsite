@@ -4,9 +4,17 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from './supabase-client';
 
+interface CustomUser {
+  id: string;
+  email: string;
+  username: string;
+  user_role: number;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
+  customUser: CustomUser | null;
   loading: boolean;
   signUp: (email: string, password: string, username: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -20,6 +28,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [customUser, setCustomUser] = useState<CustomUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +37,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setUser(session?.user ?? null);
+      
+      // If user is authenticated, fetch custom user data
+      if (session?.user?.email) {
+        try {
+          const response = await fetch('/api/auth/supabase-user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              email: session.user.email,
+              username: session.user.user_metadata?.username 
+            }),
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setCustomUser(data.user);
+          }
+        } catch (error) {
+          console.error('Error fetching custom user:', error);
+        }
+      }
+      
       setLoading(false);
     };
 
@@ -38,6 +71,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        
+        // If user is authenticated, fetch custom user data
+        if (session?.user?.email) {
+          try {
+            const response = await fetch('/api/auth/supabase-user', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ 
+                email: session.user.email,
+                username: session.user.user_metadata?.username 
+              }),
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              setCustomUser(data.user);
+            }
+          } catch (error) {
+            console.error('Error fetching custom user:', error);
+          }
+        } else {
+          setCustomUser(null);
+        }
+        
         setLoading(false);
       }
     );
@@ -92,6 +151,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user,
     session,
+    customUser,
     loading,
     signUp,
     signIn,

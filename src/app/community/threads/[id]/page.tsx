@@ -4,6 +4,7 @@ import React, { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import ReactionBar from '../../../components/forum/ReactionBar';
+import { useAuth } from '@/lib/auth-context';
 
 interface Thread {
   id: string;
@@ -53,24 +54,10 @@ const ThreadDetailPage: React.FC<ThreadDetailPageProps> = ({ params }) => {
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [userId, setUserId] = useState<string | undefined>();
-
-  const fetchCurrentUser = async () => {
-    try {
-      const response = await fetch('/api/auth/me');
-      if (response.ok) {
-        const data = await response.json();
-        setUserId(data.user?.id);
-      } else {
-        console.log('User not logged in');
-      }
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
+  const { customUser } = useAuth();
+  const userId = customUser?.id;
 
   useEffect(() => {
-    fetchCurrentUser();
     fetchThread();
   }, [id]);
 
@@ -157,7 +144,7 @@ const ThreadDetailPage: React.FC<ThreadDetailPageProps> = ({ params }) => {
               {error || 'Thread not found'}
             </h1>
             <Link
-              href="/community"
+              href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/community`}
               className="text-blue-600 dark:text-blue-400 hover:underline"
             >
               ← Back to Community
@@ -174,7 +161,7 @@ const ThreadDetailPage: React.FC<ThreadDetailPageProps> = ({ params }) => {
         {/* Back Button */}
         <div className="mb-6">
           <Link
-            href="/community"
+            href={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/community`}
             className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
