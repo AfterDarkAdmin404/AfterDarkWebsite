@@ -1,0 +1,476 @@
+{
+  "info": {
+    "name": "After Dark Forum API",
+    "description": "Complete API collection for the After Dark Forum system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "threadId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Create Category (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Category\",\n  \"description\": \"A new forum category\",\n  \"slug\": \"new-category\",\n  \"color\": \"#10B981\",\n  \"icon\": \"star\",\n  \"sort_order\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "categories"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Threads",
+      "item": [
+        {
+          "name": "Get All Threads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads"]
+            }
+          }
+        },
+        {
+          "name": "Get Threads by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads?categoryId={{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "{{categoryId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Threads with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads?page=1&limit=10&sortBy=created_at&sortOrder=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "created_at"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Threads",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads?search=supabase",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "supabase"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Thread",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My First Thread\",\n  \"content\": \"This is the content of my first thread. I'm excited to be part of this community!\",\n  \"category_id\": \"{{categoryId}}\",\n  \"author_id\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads"]
+            }
+          }
+        },
+        {
+          "name": "Get Single Thread",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads/{{threadId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads", "{{threadId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Thread",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Thread Title\",\n  \"content\": \"This is the updated content of my thread.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads/{{threadId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads", "{{threadId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Thread",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/threads/{{threadId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "threads", "{{threadId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Get Comments for Thread",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/comments?threadId={{threadId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "comments"],
+              "query": [
+                {
+                  "key": "threadId",
+                  "value": "{{threadId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Comments with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/comments?threadId={{threadId}}&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "comments"],
+              "query": [
+                {
+                  "key": "threadId",
+                  "value": "{{threadId}}"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"thread_id\": \"{{threadId}}\",\n  \"author_id\": \"{{userId}}\",\n  \"content\": \"This is my comment on this thread.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "comments"]
+            }
+          }
+        },
+        {
+          "name": "Create Reply to Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"thread_id\": \"{{threadId}}\",\n  \"author_id\": \"{{userId}}\",\n  \"parent_id\": \"COMMENT_ID_HERE\",\n  \"content\": \"This is a reply to another comment.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "comments"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reactions",
+      "item": [
+        {
+          "name": "Get Reactions for Thread",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/reactions?targetType=thread&targetId={{threadId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "reactions"],
+              "query": [
+                {
+                  "key": "targetType",
+                  "value": "thread"
+                },
+                {
+                  "key": "targetId",
+                  "value": "{{threadId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Reactions for Comment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/reactions?targetType=comment&targetId=COMMENT_ID_HERE",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "reactions"],
+              "query": [
+                {
+                  "key": "targetType",
+                  "value": "comment"
+                },
+                {
+                  "key": "targetId",
+                  "value": "COMMENT_ID_HERE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Like Reaction to Thread",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"target_type\": \"thread\",\n  \"target_id\": \"{{threadId}}\",\n  \"reaction_type\": \"like\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/reactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "reactions"]
+            }
+          }
+        },
+        {
+          "name": "Add Love Reaction to Thread",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"target_type\": \"thread\",\n  \"target_id\": \"{{threadId}}\",\n  \"reaction_type\": \"love\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/reactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "reactions"]
+            }
+          }
+        },
+        {
+          "name": "Add Reaction to Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"{{userId}}\",\n  \"target_type\": \"comment\",\n  \"target_id\": \"COMMENT_ID_HERE\",\n  \"reaction_type\": \"laugh\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/forum/reactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "reactions"]
+            }
+          }
+        },
+        {
+          "name": "Remove Reaction",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/reactions?userId={{userId}}&targetType=thread&targetId={{threadId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "reactions"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "{{userId}}"
+                },
+                {
+                  "key": "targetType",
+                  "value": "thread"
+                },
+                {
+                  "key": "targetId",
+                  "value": "{{threadId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup Scripts",
+      "item": [
+        {
+          "name": "Get User ID (Setup)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/test-users",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "test-users"]
+            }
+          }
+        },
+        {
+          "name": "Get Category ID (Setup)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/forum/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["forum", "categories"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+} 
