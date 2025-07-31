@@ -1,9 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Environment variables - these must be set in your environment
+// Environment variables for client-side use only
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Validate required environment variables for client-side use
 if (!supabaseUrl) {
@@ -210,24 +209,4 @@ export interface Database {
 }
 
 // Single typed Supabase client for client-side use
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
-
-// Server-side Supabase client with service role key (only used in API routes)
-export const supabaseAdmin = createClient<Database>(
-  supabaseUrl,
-  supabaseServiceRoleKey || '',
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
-  }
-);
-
-// Helper function to validate service role key (for server-side use)
-export function validateServiceRoleKey() {
-  if (!supabaseServiceRoleKey) {
-    throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
-  }
-  return supabaseServiceRoleKey;
-} 
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey); 
